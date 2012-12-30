@@ -37,6 +37,8 @@ public class MAIN extends Application {
         primaryStage.setTitle("Hello World!");
         primaryStage.setScene(scene);
         primaryStage.show();
+        
+        System.out.println(System.getProperty("user.home"));
     }
 
     /**
