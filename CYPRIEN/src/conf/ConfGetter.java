@@ -23,7 +23,7 @@ public class ConfGetter {
     private Properties prop = new Properties();
     private Path path = FileSystems.getDefault().getPath(null, "prop");
     
-    public Path searchDirectory() throws IOException {
+    public String searchDirectory() throws IOException {
         try(BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
             prop.load(reader);
             String result = prop.getProperty("searchDirectory");
@@ -34,7 +34,7 @@ public class ConfGetter {
         }
     }
     
-    public Path saveDirectory() {
+    public String saveDirectory() {
         try(BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
             prop.load(reader);
             String result = prop.getProperty("saveDirectory");

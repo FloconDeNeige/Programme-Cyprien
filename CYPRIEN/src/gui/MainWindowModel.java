@@ -5,6 +5,11 @@
 package gui;
 
 import gui.derivative.ElemFactory;
+import java.io.File;
+import java.nio.file.Path;
+import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -17,6 +22,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.DirectoryChooser;
 
 /**
  *
@@ -39,6 +45,15 @@ public class MainWindowModel {
         Insets insets = new Insets(10,10,10,10);
         MenuItem save = new MenuItem("save");
         MenuItem search = new MenuItem("search");
+        save.addEventHandler(ActionEvent.ANY, new EventHandler() {
+
+            @Override
+            public void handle(Event t) {
+                DirectoryChooser dc = new DirectoryChooser();
+                dc.setInitialDirectory(new File(ConfGetter.));
+            }
+            
+        });
         settingsMenu.getItems().addAll(save, search);
         menuBar.getMenus().add(settingsMenu);
         HBox.setMargin(newButton, insets);
