@@ -5,6 +5,7 @@
 package conf;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
@@ -13,6 +14,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -20,28 +23,46 @@ import java.util.Properties;
  */
 public class ConfGetter {
     
-    private Properties prop = new Properties();
-    private Path path = FileSystems.getDefault().getPath(null, "prop");
+    static Properties prop = PropHandle.getProp();
+    static Path path = PropHandle.getPath();
     
-    public String searchDirectory() throws IOException {
+    public static String searchDirectory() {
         try(BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
             prop.load(reader);
-            String result = prop.getProperty("searchDirectory");
-            return Paths.get(result);
+            return prop.getProperty("searchDirectory");
         } catch (IOException ex) {
-            System.out.println("IOException occured!");
-            throw new RuntimeException();
+            try {
+                PropHandle.reset();
+                BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8);
+                prop.load(reader);
+                return prop.getProperty("searchDirectory");
+            } catch (FileNotFoundException ex1) {
+                Logger.getLogger(ConfSetter.class.getName()).log(Level.SEVERE, null, ex1);
+                throw new RuntimeException();
+            } catch (IOException ex1) {
+                Logger.getLogger(ConfSetter.class.getName()).log(Level.SEVERE, null, ex1);
+                throw new RuntimeException();
+            }
         }
     }
     
-    public String saveDirectory() {
+    public static String saveDirectory() {
         try(BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
             prop.load(reader);
-            String result = prop.getProperty("saveDirectory");
-            return Paths.get(result);
+            return prop.getProperty("saveDirectory");
         } catch (IOException ex) {
-            System.out.println("IOException occured!");
-            throw new RuntimeException();
+            try {
+                PropHandle.reset();
+                BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8);
+                prop.load(reader);
+                return prop.getProperty("saveDirectory");
+            } catch (FileNotFoundException ex1) {
+                Logger.getLogger(ConfSetter.class.getName()).log(Level.SEVERE, null, ex1);
+                throw new RuntimeException();
+            } catch (IOException ex1) {
+                Logger.getLogger(ConfSetter.class.getName()).log(Level.SEVERE, null, ex1);
+                throw new RuntimeException();
+            }
         }
     }
     

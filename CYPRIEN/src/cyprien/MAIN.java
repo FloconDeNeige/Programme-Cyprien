@@ -21,9 +21,7 @@ public class MAIN extends Application {
     
     @Override
     public void start(Stage primaryStage) {
-        MainWindowModel mwm = new MainWindowModel();
-        primaryStage.setScene(mwm.getScene());
-        primaryStage.show();
+        MainWindowModel mwm = new MainWindowModel(primaryStage);
         
         System.out.println(System.getProperty("user.home"));
     }

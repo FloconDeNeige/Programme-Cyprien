@@ -4,6 +4,8 @@
  */
 package gui;
 
+import conf.ConfGetter;
+import conf.ConfSetter;
 import gui.derivative.ElemFactory;
 import java.io.File;
 import java.nio.file.Path;
@@ -23,6 +25,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
+import javafx.stage.Stage;
 
 /**
  *
@@ -30,6 +33,7 @@ import javafx.stage.DirectoryChooser;
  */
 public class MainWindowModel {
     
+    private Stage stage = null;
     private Scene scene = null;
     private VBox vBox = new VBox();
     private HBox hBox = new HBox();
@@ -41,7 +45,8 @@ public class MainWindowModel {
     private Button newButton = new Button("NEW");
     private Button okButton = new Button("OK");
     
-    public MainWindowModel() {
+    public MainWindowModel(Stage stage) {
+        final Stage primeStage = this.stage = stage;
         Insets insets = new Insets(10,10,10,10);
         MenuItem save = new MenuItem("save");
         MenuItem search = new MenuItem("search");
@@ -50,7 +55,9 @@ public class MainWindowModel {
             @Override
             public void handle(Event t) {
                 DirectoryChooser dc = new DirectoryChooser();
-                dc.setInitialDirectory(new File(ConfGetter.));
+                dc.setInitialDirectory(new File(ConfGetter.saveDirectory()));
+                File chosenDir = dc.showDialog(primeStage);
+                ConfSetter.saveDirectory(chosenDir.getAbsolutePath());
             }
             
         });
@@ -64,6 +71,8 @@ public class MainWindowModel {
         VBox.setMargin(textField, insets);
         vBox.getChildren().addAll(menuBar, imageView, textField, hBox);
         scene = ElemFactory.scene(vBox);
+        stage.setScene(scene);
+        stage.show();
     }
     
     public Scene getScene() {
