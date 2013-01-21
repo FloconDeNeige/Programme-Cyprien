@@ -26,7 +26,7 @@ public class ConfSetter {
     static Properties prop = PropHandle.getProp();
     static Path path = PropHandle.getPath();
 
-    public static void searchDirectory(String dir) throws IOException {
+    public static void searchDirectory(String dir) {
         try {
             BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8);
             prop.load(reader);
