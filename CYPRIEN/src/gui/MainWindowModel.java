@@ -8,6 +8,7 @@ import conf.ConfGetter;
 import conf.ConfSetter;
 import gui.derivative.ElemFactory;
 import gui.derivative.MyImageView;
+import java.awt.Font;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.nio.file.Path;
@@ -24,6 +25,7 @@ import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -46,15 +48,17 @@ public class MainWindowModel {
     private Stage stage = null;
     private Scene scene = null;
     private final VBox vBox = new VBox();
-    private final VBox sliderVBox = new VBox();
+    private final VBox zoomSliderVBox = new VBox();
     private final Button zoomin = new Button("+");
     private final Button zoomout = new Button("-");
-    private final HBox hBox1 = new HBox();
-    private final HBox hBox2 = new HBox();
+    private final HBox imageHBox = new HBox();
+    private final HBox ratioSliderHBox = new HBox();
+    private final HBox buttonHBox = new HBox();
     private final MenuBar menuBar = new MenuBar();
     private final Menu settingsMenu = new Menu("Settings");
     private final MyImageView imageView = new MyImageView();
-    private final Slider slider = new Slider(100,400,100);
+    private final Slider zoomSlider = new Slider(100,400,100);
+    private final Slider ratioSlider = new Slider(0.25,4,1);
     private TextField textField = new TextField();
     private Button newButton = new Button("NEW");
     private Button okButton = new Button("OK");
@@ -63,6 +67,11 @@ public class MainWindowModel {
         final Stage primeStage = this.stage = stage;
         Insets insets = new Insets(10,10,10,10);
         Insets insideInsets = new Insets(10,0,10,0);
+        
+        /*
+         * Setting the menu
+         */
+        
         MenuItem save = new MenuItem("save");
         MenuItem search = new MenuItem("search");
         save.addEventHandler(ActionEvent.ANY, new EventHandler() {
@@ -82,12 +91,16 @@ public class MainWindowModel {
         settingsMenu.getItems().addAll(save, search);
         menuBar.getMenus().add(settingsMenu);
         
-        slider.setBlockIncrement(0.005);
+        /*
+         * Setting zoomSliderVBox
+         */
+        
+        zoomSlider.setBlockIncrement(0.005);
         zoomin.addEventHandler(ActionEvent.ACTION, new EventHandler() {
 
             @Override
             public void handle(Event t) {
-                slider.increment();
+                zoomSlider.increment();
             }
             
         });
@@ -95,12 +108,12 @@ public class MainWindowModel {
 
             @Override
             public void handle(Event t) {
-                slider.decrement();
+                zoomSlider.decrement();
             }
             
         });
         
-        slider.valueProperty().addListener(new ChangeListener<Number>() {
+        zoomSlider.valueProperty().addListener(new ChangeListener<Number>() {
 
             @Override
             public void changed(ObservableValue<? extends Number> ov, Number _old, Number _new) {
@@ -108,18 +121,35 @@ public class MainWindowModel {
             }
         
     });
-        slider.setOrientation(Orientation.VERTICAL);
+        Label zoomLabel = new Label("Zoom");
+        //zoomLabel.getFont().
+        zoomSlider.setOrientation(Orientation.VERTICAL);
         VBox.setMargin(zoomin, insideInsets);
         VBox.setMargin(zoomout, insideInsets);
-        sliderVBox.setAlignment(Pos.CENTER);
-        sliderVBox.getChildren().addAll(zoomin, slider, zoomout);
+        zoomSliderVBox.setAlignment(Pos.CENTER);
+        zoomSliderVBox.getChildren().addAll(zoomLabel, zoomin, zoomSlider, zoomout);
+        
+        /*
+         * Setting imageHBox
+         */
         
         imageView.setGrab();
         HBox.setMargin(imageView, insets);
-        HBox.setMargin(sliderVBox, insets);
-        hBox1.setAlignment(Pos.CENTER);
-        hBox1.getChildren().addAll(imageView, sliderVBox);
+        HBox.setMargin(zoomSliderVBox, insets);
+        imageHBox.setAlignment(Pos.CENTER);
+        imageHBox.getChildren().addAll(imageView, zoomSliderVBox);
         
+        /*
+         * Setting ratioSliderHBox
+         */
+        
+        Label ratioLabel = new Label("Ratio");
+        // setting the font correctly....
+        
+        
+        /*
+         * Setting buttonHBox
+         */
         
         newButton.addEventHandler(ActionEvent.ACTION, new EventHandler() {
 
@@ -139,11 +169,11 @@ public class MainWindowModel {
         });
         HBox.setMargin(newButton, insets);
         HBox.setMargin(okButton, insets);
-        hBox2.setAlignment(Pos.CENTER);
-        hBox2.getChildren().addAll(newButton, okButton);
+        buttonHBox.setAlignment(Pos.CENTER);
+        buttonHBox.getChildren().addAll(newButton, okButton);
         VBox.setMargin(imageView, insets);
         VBox.setMargin(textField, insets);
-        vBox.getChildren().addAll(menuBar, hBox1, textField, hBox2);
+        vBox.getChildren().addAll(menuBar, imageHBox, textField, buttonHBox);
         scene = ElemFactory.scene(vBox);
         stage.setScene(scene);
         stage.show();
